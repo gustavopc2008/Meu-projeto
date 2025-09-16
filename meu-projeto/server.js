@@ -1,8 +1,8 @@
 import express from "express";
 import fetch from "node-fetch";
 import path from "path";
-import fs from "fs";
 import { google } from "googleapis";
+import { fileURLToPath } from "url";
 
 const app = express();
 app.use(express.json());
@@ -10,8 +10,20 @@ app.use(express.static(path.join(new URL("../frontend", import.meta.url).pathnam
 
 // ====== CONFIG GOOGLE SHEETS ======
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
-const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_JSON);
 
+// ✅ Carregar service account da variável de ambiente
+if (!process.env.SERVICE_ACCOUNT_JSON) {
+  console.error("❌ Variável SERVICE_ACCOUNT_JSON não definida!");
+  process.exit(1);
+}
+
+let serviceAccount;
+try {
+  serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_JSON);
+} catch (err) {
+  console.error("❌ JSON da SERVICE_ACCOUNT_JSON inválido:", err);
+  process.exit(1);
+}
 
 const auth = new google.auth.GoogleAuth({
   credentials: serviceAccount,
@@ -63,13 +75,9 @@ app.post("/suggest", async (req, res) => {
 });
 
 // ===== Servir frontend =====
-import { fileURLToPath } from "url";
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use((req, res) => res.sendFile(path.join(__dirname, "../frontend/index.html")));
 
-
 app.listen(3000, () => console.log("✅ Backend rodando na porta 3000"));
-
