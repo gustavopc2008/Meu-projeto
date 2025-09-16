@@ -10,7 +10,7 @@ app.use(express.json());
 // ===== Caminho absoluto do frontend =====
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const frontendPath = path.join(__dirname, "../frontend");
+const frontendPath = path.join(__dirname, "frontend");
 
 // Servir arquivos estáticos
 app.use(express.static(frontendPath));
@@ -89,3 +89,4 @@ app.get("*", (req, res) => {
 // ===== Start server =====
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ Backend rodando na porta ${PORT}`));
+
