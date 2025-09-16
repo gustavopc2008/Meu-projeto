@@ -10,7 +10,8 @@ app.use(express.static(path.join(new URL("../frontend", import.meta.url).pathnam
 
 // ====== CONFIG GOOGLE SHEETS ======
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
-const serviceAccount = JSON.parse(fs.readFileSync("./service-account.json", "utf-8"));
+const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_JSON);
+
 
 const auth = new google.auth.GoogleAuth({
   credentials: serviceAccount,
@@ -71,3 +72,4 @@ app.use((req, res) => res.sendFile(path.join(__dirname, "../frontend/index.html"
 
 
 app.listen(3000, () => console.log("✅ Backend rodando na porta 3000"));
+
