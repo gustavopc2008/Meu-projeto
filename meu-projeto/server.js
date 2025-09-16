@@ -6,7 +6,14 @@ import { fileURLToPath } from "url";
 
 const app = express();
 app.use(express.json());
-app.use(express.static(path.join(new URL("../frontend", import.meta.url).pathname)));
+
+// ===== Caminho absoluto do frontend =====
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const frontendPath = path.join(__dirname, "../frontend");
+
+// Servir arquivos estáticos
+app.use(express.static(frontendPath));
 
 // ====== CONFIG GOOGLE SHEETS ======
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
@@ -74,10 +81,12 @@ app.post("/suggest", async (req, res) => {
   }
 });
 
-// ===== Servir frontend =====
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// ===== Todas as rotas que não forem API vão para o index.html =====
+app.get("*", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
 
-app.use((req, res) => res.sendFile(path.join(__dirname, "../frontend/index.html")));
+// ===== Start server =====
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Backend rodando na porta ${PORT}`));
 
-app.listen(3000, () => console.log("✅ Backend rodando na porta 3000"));
