@@ -98,4 +98,6 @@ const __dirname = path.dirname(__filename);
 app.use((req, res) => res.sendFile(path.join(__dirname, "../frontend/index.html")));
 
 
-app.listen(3000, () => console.log("✅ Backend rodando na porta 3000"));
+// ===== Start server =====
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Backend rodando na porta ${PORT}`));
