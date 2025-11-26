@@ -1,0 +1,25 @@
+# Dependências
+node_modules/
+package-lock.json
+
+# Credenciais e Segredos
+service-account.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Variáveis de ambiente
+.env
+.env.local
+
